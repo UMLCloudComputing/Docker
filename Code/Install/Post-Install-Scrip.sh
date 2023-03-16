@@ -26,7 +26,7 @@ if [ "$(grep -q -E "^docker:" /etc/group | wc -l)" -eq 0 ]; then
 fi
 
 # Add the user to the group
-usermod -aG docker $SUDO_USER
+usermod -aG docker $(logname)
 
 # Reload the docker group. Applies canges
 newgrp docker

@@ -29,4 +29,4 @@ fi
 usermod -aG docker $(logname)
 
 # Reload the docker group. Applies canges
-sudo -u $(logname) newgrp docker
+sudo -H -u $SUDO_USER bash -c 'newgrp docker'

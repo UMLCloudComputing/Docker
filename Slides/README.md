@@ -11,7 +11,7 @@ This contains (or will contain) slides, that is is - no viruses as far as I know
   - [What is an Image](#what-is-an-image)
   - [What is an Container](#what-is-an-container)
   - [What are Volumes](#what-are-volumes)
-  - [What are Networks](#what-are-networks)
+  - [What are Docker Networks](#what-are-docker-networks)
   - [Dockerfiles](#dockerfiles)
     - [Docker from Scratch](#docker-from-scratch)
     - [Building on base images](#building-on-base-images)
@@ -20,11 +20,11 @@ This contains (or will contain) slides, that is is - no viruses as far as I know
   - [Docker through Portainer](#docker-through-portainer)
   - [Uses of Docker](#uses-of-docker)
 ## Basic Terminology 
- **Ports**:
- **Dynamic Linking**:
- **Static Linking**:
- **Namespaces**:
- **CGroups**:
+ **Ports**: These are structures that the system uses to demux connections to different services - 1 - 1023 are for well known services and require privileged (root) privileges to bind to 
+ **Dynamic Linking**: This is a process of liking library's where the library links or "cooks" calls to external librarys once a program is loaded, as we do not know where they will be loaded in memory at compile time. This allows multiple programs to share one library (loaded in memory) reducing memory usage - and a programs binary size.
+ **Static Linking**: This is a process of linking the library's at compile time, they are added to the programs binary (code) and linking is locally relative. [Probably reword]
+ **Namespaces**: This is a kernel structure which allows us to isolate various "things" or parts a process may use such as the network stack or process namespace.
+ **CGroups**: This is a 
  **Capabilities:**:
  **System Calls**:
  **Linux Filesystem**:
@@ -73,12 +73,23 @@ We can see some noticeable characteristics.
   * Additionally you cannot have the container daemon - the thing managing the containers replace the host OS as it requires a OS kernel to execute systemcalls (code)
 * You will also notice that the containers have only what they need, they are a way to package up the minimal amount of resources to run an application
 ## What is an Image
+Images are a **blueprint** as to what the base of the conatiner should be.
+
+Images are imitable, in the sense that they are only changed when a new one is build and has the same tag. Changes container make during their runtime are made in the scratch space memory provided to running containers. These changes will not be reflected in the base image, or any other currently running containers (unless the changes are made to files located in volumes).
+
+We define images using [Dockerfiles](#dockerfiles).
 
 ## What is an Container
+Containers are running instances of images. They are really just a set of **isolated processes** sharing a set of isolated resources, this being the network, filesystem, IPC, ect. They utilize the **host** kernel and hardware for executing instructions - so the types of software we run on them must be able to run on the host.
 
+Containers are created using CGroups and Namespaces, so if you look at the different types of namespaces you can get an idea of the isolation involved; **process**, **network**, **mount (filesystem)**,**inter process communication**, and **CGroup** namespaces to name a few. CGroups are utilized to limit the amount of resources a process or set of processes can utilize at a given time, as containers are just a set of isolated processes running on the host system we can apply CGroups to them! However I will not be going over this...
+
+Containers are not persistent, they are ephemeral in nature. Changes made on a container are not preserved once the container is deleted. We can utilize some additional Docker structures to add a form of persistance to the containers.
+
+Something to note is the Host Operating System **must** support some structure analogous to  
 ## What are Volumes
-
-## What are Networks 
+Volumes are used to provide persistance to containers, we mount or bind the volume to a specified part of the container's file system. The files in this volume will be stored at a specific location on the host's machine. Multiple containers can be attached to this volume, and changed made will be reflected on all containers.
+## What are Docker Networks 
 
 ## Dockerfiles 
 ### Docker from Scratch

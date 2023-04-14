@@ -23,20 +23,20 @@ This contains (or will contain) slides, that is is - no viruses as far as I know
  **Ports**: These are structures that the system uses to demux connections to different services - 1 - 1023 are for well known services and require privileged (root) privileges to bind to 
  **Dynamic Linking**: This is a process of liking library's where the library links or "cooks" calls to external librarys once a program is loaded, as we do not know where they will be loaded in memory at compile time. This allows multiple programs to share one library (loaded in memory) reducing memory usage - and a programs binary size.
  **Static Linking**: This is a process of linking the library's at compile time, they are added to the programs binary (code) and linking is locally relative. [Probably reword]
- **Namespaces**: This is a kernel structure which allows us to isolate various "things" or parts a process may use such as the network stack or process namespace.
- **CGroups**: This is a 
- **Capabilities:**:
- **System Calls**:
- **Linux Filesystem**:
- **Proc Filesystem**:
- **Docker Socket**:
- **Rootless Docker**:
-   * **UID**:
-   * **root user**:
+ **Namespaces**: This is a kernel structure which allows us to isolate or partition various "things" or resources a process may use such as the network stack or process namespace. This allows us to isolate processes or their view of the system from one another. 
+ **CGroups**: This is also a kernel structure that allows us to limit the consumption or possible allocation of computing resources to a process or set of processes (If it is applied to a group of them/namespace)
+ **Capabilities:**: This is what we use to grant privlages to a given container, to do actions on/with host system resources they would otherwise be unable to do. Such as allowing them to use Raw network sockets.
+ **System Calls**: This is a mechanism that is used to interact with the host kernel, and by extension the hardware of the system. All programs will make system calls, and we can examin this using the **strace** program on linux. Be warned there will be alot of output, and most of it makes little sense. For example you will likely see the **brk** system call, what does this mean? Well this comes from the time the end/top of the heap was called the break and is used when allocating more space to the heap. **I may be spreading misinformation here** 
+ **Linux Filesystem**: This is the normal filesystem we interact with, consisting of links to INodes. All of the things in a linux system are represented as files, this includes directories (folders) they are just a special type of file.
+ **Proc Filesystem**: This is a "fake" filesystem, in that it is not stored on the disk and exists entirely in the volatile memory of the system, we can examine the information contained to learn more about the processes running on the system. Even accessing their file descriptors to send information to them (Think pipes)
+ **Docker Socket**: This is a special socket that is used to communicate with the Docker Engine. You should not expose this to the network or especially the internet unless you know what you are doing.
+ **Rootless Docker**: This is a configuration that can be made so the docker containers that the engine creates are ran as a non-root user with a UID > 0, other containerization implementations such as podman do this automatically. Having containers run as privileged processes (the root user) is dangerous, as if they are able to escape the container then they have a root shell.
+   * **UID**: The ID associated with a USER and the processes they generate
+   * **root user**: This is a privileged user with the UID of 0, they can access and control everything on the system.
 
 
-**Daemon**:
-    **Examples**:
+**Daemon**: Backround processes that often control background processes or configure the system when it is started
+    **Examples**: The docker daemon, auditd daemon and the systemd daemon to name a few.
 
 ## Basic Linux Commands 
 This is so those unfamiliar with linux can follow along. Although you should become more familiar before you attempt to go further with docker, or use it as a good learning experience.
@@ -90,8 +90,12 @@ Something to note is the Host Operating System **must** support some structure a
 ## What are Volumes
 Volumes are used to provide persistance to containers, we mount or bind the volume to a specified part of the container's file system. The files in this volume will be stored at a specific location on the host's machine. Multiple containers can be attached to this volume, and changed made will be reflected on all containers.
 ## What are Docker Networks 
+Docker networks are a **virtual network** that may be bridged to the host's adaptor to grant them access to the internet. We can create new networks or use prexisting ones so that we can partition the containers into their own isolated networks to prevent or limit access and traversals. 
 
+The networks are private and not directly accessible.
 ## Dockerfiles 
+These are the files that we can use to...
+
 ### Docker from Scratch
 ### Building on base images
 ### Docker Hub

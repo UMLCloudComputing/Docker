@@ -39,7 +39,7 @@ This contains (or will contain) slides, that is is - no viruses as far as I know
  **Proc Filesystem**: This is a "fake" filesystem, in that it is not stored on the disk and exists entirely in the volatile memory of the system, we can examine the information contained to learn more about the processes running on the system. Even accessing their file descriptors to send information to them (Think pipes)
 
  **Docker Socket**: This is a special socket that is used to communicate with the Docker Engine. You should not expose this to the network or especially the internet unless you know what you are doing.
- 
+
  **Rootless Docker**: This is a configuration that can be made so the docker containers that the engine creates are ran as a non-root user with a UID > 0, other containerization implementations such as podman do this automatically. Having containers run as privileged processes (the root user) is dangerous, as if they are able to escape the container then they have a root shell.
    * **UID**: The ID associated with a USER and the processes they generate
    * **root user**: This is a privileged user with the UID of 0, they can access and control everything on the system.
@@ -178,6 +178,10 @@ All the flags other than the last one are optional
   * -v \<path/on/host\>:\<path/on/container\>: Mount the \<path/on/host\> file/dir to the container at \<path/on/container\>
   * --network \<network\>: Attach the container to the specified docker network
   * \<image_name\>: The image that will be turned into a container
+* docker stop \<container_name/ID\>: Stop a container
+* docker start \<container_name/ID\>: Start a stopped container
+* docker rm \<container_name/ID\>: remove a container
+  * -f (Force can be added if the container is running)
 * docker network:
   * create: Create a new docker network
     * -d \<driver\>: Create a docker network with the specified driver

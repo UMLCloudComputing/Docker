@@ -1,4 +1,4 @@
 # Start nginx 
 service nginx start
 # Run forever
-docker  -f /dev/null
+tail  -f /dev/null

@@ -9,3 +9,12 @@
 
 `lxc-start --name test_container`
 * This will start the container
+
+`lxc-ls --fancy` 
+* List the currently running containers on a fancy format.
+
+` lxc-attach --name mycontainer`
+* This is like `docker exec -it <ID> /bin/bash
+
+`lxc-destroy --force --name mycontainer`
+* Remove the container
